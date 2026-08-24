@@ -53,8 +53,8 @@ const ShopPage: React.FC = () => {
   );
 
   return (
-    <IonPage>
-      <IonHeader>
+    <IonPage className="tea-shop-page">
+      <IonHeader className="shop-header">
         <IonToolbar>
           <IonTitle>Tea Atelier</IonTitle>
           <IonButtons slot="end">
@@ -78,44 +78,53 @@ const ShopPage: React.FC = () => {
       </IonHeader>
 
       <IonContent>
-        {isLoading && (
-          <div style={{ display: "flex", justifyContent: "center", padding: 32 }}>
-            <IonSpinner name="crescent" />
-          </div>
-        )}
-        {error && <IonText color="danger"><p className="ion-padding">{error}</p></IonText>}
+        <div className="shop-inner">
+          {isLoading && (
+            <div style={{ display: "flex", justifyContent: "center", padding: 32 }}>
+              <IonSpinner name="crescent" />
+            </div>
+          )}
+          {error && <IonText color="danger"><p className="ion-padding">{error}</p></IonText>}
 
-        <IonGrid>
-          <IonRow>
-            {filtered.map((product) => (
-              <IonCol size="6" key={product.id}>
-                <IonCard
-                  onClick={() => navigate(`/product/${product.id}`)}
-                  style={{ cursor: "pointer", height: "100%" }}
-                >
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    style={{ width: "100%", height: 140, objectFit: "cover" }}
-                  />
-                  <IonCardHeader>
-                    <IonCardTitle style={{ fontSize: 14 }}>{product.name}</IonCardTitle>
-                  </IonCardHeader>
-                  <IonCardContent>
-                    <p style={{ fontWeight: "bold", margin: 0 }}>₱{product.price.toFixed(2)}</p>
-                    <p style={{ fontSize: 12, color: product.availability === "In Stock" ? "green" : "red", margin: 0 }}>
-                      {product.availability}
-                    </p>
-                  </IonCardContent>
-                </IonCard>
-              </IonCol>
-            ))}
-          </IonRow>
-        </IonGrid>
+          <IonGrid className="product-grid">
+            <IonRow>
+              {filtered.map((product) => (
+                <IonCol size="6" key={product.id}>
+                  <IonCard
+                    className="tea-product-card"
+                    onClick={() => navigate(`/product/${product.id}`)}
+                    style={{ cursor: "pointer", height: "100%" }}
+                  >
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="tea-product-image"
+                    />
+                    <div className="tea-product-body">
+                      <p className="tea-product-name">{product.name}</p>
+                      <div className="tea-product-meta">
+                        <span className="tea-product-price">₱{product.price.toFixed(2)}</span>
+                        <span className={`tea-product-stock ${product.availability === "In Stock" ? "" : "out"}`}>
+                          {product.availability}
+                        </span>
+                      </div>
+                      <IonButton className="tea-product-cta" expand="block" size="small" onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/product/${product.id}`);
+                      }}>
+                        View
+                      </IonButton>
+                    </div>
+                  </IonCard>
+                </IonCol>
+              ))}
+            </IonRow>
+          </IonGrid>
 
-        {!isLoading && filtered.length === 0 && (
-          <IonText><p className="ion-padding ion-text-center">No products found.</p></IonText>
-        )}
+          {!isLoading && filtered.length === 0 && (
+            <IonText><p className="ion-padding ion-text-center">No products found.</p></IonText>
+          )}
+        </div>
       </IonContent>
     </IonPage>
   );

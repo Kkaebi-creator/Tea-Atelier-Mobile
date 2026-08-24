@@ -40,58 +40,63 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage className="tea-auth-page">
       <IonHeader>
         <IonToolbar>
           <IonTitle>Sign In</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <h2 style={{ textAlign: "center", marginBottom: 24 }}>Tea Atelier</h2>
+        <div className="auth-container">
+          <h2 className="auth-title">Tea Atelier</h2>
 
-        {error && <IonText color="danger"><p>{error}</p></IonText>}
+          {error && <IonText className="error-text">{error}</IonText>}
 
-        <IonItem>
-          <IonLabel position="stacked">Email</IonLabel>
-          <IonInput
-            type="email"
-            value={email}
-            onIonChange={(e) => setEmail(e.detail.value!)}
-            placeholder="you@example.com"
-          />
-        </IonItem>
+          <div className="auth-form">
+            <label className="field-label">Email</label>
+            <IonItem className="soft-field">
+              <IonInput
+                type="email"
+                value={email}
+                onIonChange={(e) => setEmail(e.detail.value!)}
+                placeholder="you@example.com"
+              />
+            </IonItem>
 
-        <IonItem>
-          <IonLabel position="stacked">Password</IonLabel>
-          <IonInput
-            type="password"
-            value={password}
-            onIonChange={(e) => setPassword(e.detail.value!)}
-            placeholder="••••••••"
-          />
-        </IonItem>
+            <label className="field-label">Password</label>
+            <IonItem className="soft-field">
+              <IonInput
+                type="password"
+                value={password}
+                onIonChange={(e) => setPassword(e.detail.value!)}
+                placeholder="••••••••"
+              />
+            </IonItem>
 
-        {requiresTotp && (
-          <IonItem>
-            <IonLabel position="stacked">Authenticator Code</IonLabel>
-            <IonInput
-              type="text"
-              value={totpCode}
-              onIonChange={(e) => setTotpCode(e.detail.value!)}
-              placeholder="6-digit code"
-              maxlength={6}
-            />
-          </IonItem>
-        )}
+            {requiresTotp && (
+              <>
+                <label className="field-label">Authenticator Code</label>
+                <IonItem className="soft-field">
+                  <IonInput
+                    type="text"
+                    value={totpCode}
+                    onIonChange={(e) => setTotpCode(e.detail.value!)}
+                    placeholder="6-digit code"
+                    maxlength={6}
+                  />
+                </IonItem>
+              </>
+            )}
 
-        <IonButton expand="block" onClick={handleSubmit} disabled={isLoading} style={{ marginTop: 16 }}>
-          {isLoading ? <IonSpinner name="crescent" /> : "Sign In"}
-        </IonButton>
+            <IonButton className="auth-button" expand="block" onClick={handleSubmit} disabled={isLoading}>
+              {isLoading ? <IonSpinner name="crescent" /> : "Sign In"}
+            </IonButton>
 
-        <p style={{ textAlign: "center", marginTop: 16 }}>
-          Don't have an account?{" "}
-          <IonRouterLink routerLink="/register">Register</IonRouterLink>
-        </p>
+            <p className="auth-link">
+              Don't have an account? <IonRouterLink routerLink="/register">Register</IonRouterLink>
+            </p>
+          </div>
+        </div>
       </IonContent>
     </IonPage>
   );

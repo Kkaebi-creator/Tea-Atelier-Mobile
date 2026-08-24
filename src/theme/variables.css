@@ -1,2 +1,416 @@
-/* For information on how to create your own theme, please refer to:
-http://ionicframework.com/docs/theming/ */
+:root {
+  --tea-bg: #0f1523;
+  --tea-bg-2: #171d2a;
+  --tea-panel: #f4efe8;
+  --tea-panel-strong: #e9dfd1;
+  --tea-card: #f8f4ee;
+  --tea-text: #1d1b1a;
+  --tea-text-soft: #4d4b49;
+  --tea-green: #89a78d;
+  --tea-green-deep: #67866d;
+  --tea-gold: #d5b47c;
+  --tea-red: #d85b5b;
+  --tea-border: rgba(255, 255, 255, 0.08);
+  --tea-shadow: rgba(0, 0, 0, 0.24);
+
+  --ion-background-color: var(--tea-bg);
+  --ion-background-color-rgb: 15, 21, 35;
+  --ion-text-color: #f4f1ee;
+  --ion-text-color-rgb: 244, 241, 238;
+  --ion-border-color: var(--tea-border);
+  --ion-item-background: transparent;
+  --ion-toolbar-background: rgba(18, 24, 34, 0.9);
+  --ion-toolbar-border-color: transparent;
+  --ion-card-background: var(--tea-panel);
+  --ion-card-color: var(--tea-text);
+  --ion-color-primary: var(--tea-green);
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-step-50: #141a2a;
+  --ion-color-step-100: #1a2130;
+  --ion-color-step-150: #202a3b;
+  --ion-color-step-200: #263042;
+  --ion-color-step-250: #2e3a4d;
+  --ion-color-step-300: #35425a;
+}
+
+html,
+body,
+#root,
+ion-app {
+  background: var(--tea-bg) !important;
+  color: var(--tea-text) !important;
+}
+
+ion-page {
+  background: var(--tea-bg) !important;
+  color: var(--tea-text) !important;
+}
+
+ion-content {
+  --background: var(--tea-bg);
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+ion-header,
+ion-toolbar,
+ion-header::after {
+  --background: rgba(20, 25, 36, 0.9);
+  background: rgba(20, 25, 36, 0.9) !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+ion-toolbar {
+  --border-width: 0;
+  --min-height: 72px;
+  padding-inline: 16px;
+}
+
+ion-title {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  color: #f3efe9;
+}
+
+ion-searchbar {
+  --background: rgba(255, 255, 255, 0.06);
+  --color: #f3efe9;
+  --placeholder-color: rgba(243, 239, 233, 0.55);
+  --icon-color: rgba(243, 239, 233, 0.8);
+  --clear-button-color: rgba(243, 239, 233, 0.8);
+  --box-shadow: none;
+  border-radius: 16px;
+  margin: 0 14px 8px;
+  padding: 0;
+}
+
+ion-searchbar .searchbar-input-container {
+  border-radius: 16px;
+}
+
+ion-button {
+  --border-radius: 14px;
+  --box-shadow: none;
+  --border: none;
+  --padding-top: 18px;
+  --padding-bottom: 18px;
+  --padding-start: 18px;
+  --padding-end: 18px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  height: 54px;
+}
+
+ion-button:not([fill='outline']) {
+  --background: var(--tea-green);
+  --background-activated: var(--tea-green-deep);
+  --background-hover: var(--tea-green-deep);
+  --color: #ffffff;
+}
+
+ion-button[fill='outline'] {
+  --background: transparent;
+  --color: var(--tea-green);
+  --border-color: rgba(137, 167, 141, 0.7);
+}
+
+ion-item {
+  --background: transparent;
+  --color: #f3efe9;
+  --padding-start: 0;
+  --padding-end: 0;
+  --inner-padding-end: 0;
+  --inner-border-width: 0;
+  --highlight-height: 0;
+  margin-bottom: 12px;
+}
+
+ion-label {
+  color: #f3efe9 !important;
+}
+
+ion-input,
+ion-textarea {
+  --background: rgba(255, 255, 255, 0.04);
+  --color: #f3efe9;
+  --placeholder-color: rgba(243, 239, 233, 0.5);
+  border-radius: 14px;
+  min-height: 52px;
+  padding: 14px 16px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+ion-input::part(native),
+ion-textarea::part(native) {
+  background: transparent;
+}
+
+ion-card {
+  --background: var(--tea-panel);
+  --color: var(--tea-text);
+  border-radius: 22px;
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.14);
+  margin: 0;
+  overflow: hidden;
+}
+
+ion-card-title,
+ion-card-subtitle,
+ion-card-content {
+  color: var(--tea-text) !important;
+}
+
+.tea-auth-page ion-content,
+.tea-auth-page ion-page {
+  --background: var(--tea-bg) !important;
+  background: var(--tea-bg) !important;
+}
+
+.tea-auth-page .auth-container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+.tea-auth-page .auth-title {
+  color: #f3efe9;
+  font-weight: 700;
+  font-size: clamp(2.1rem, 5vw, 3.1rem);
+  letter-spacing: -0.06em;
+  text-align: center;
+  margin: 20px 0 30px;
+}
+
+.tea-auth-page .auth-form {
+  margin-top: 18px;
+}
+
+.tea-auth-page .error-text {
+  color: #ff8891;
+  font-weight: 600;
+  margin: 0 0 16px;
+}
+
+.tea-auth-page .field-label {
+  color: rgba(243, 239, 233, 0.8);
+  display: block;
+  margin: 22px 0 10px;
+  font-size: 0.9rem;
+}
+
+.tea-auth-page .soft-field {
+  margin-bottom: 14px;
+}
+
+.tea-auth-page .soft-field ion-input {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tea-auth-page .auth-button {
+  margin-top: 18px;
+}
+
+.tea-auth-page .auth-link {
+  text-align: center;
+  color: rgba(243, 239, 233, 0.8);
+  margin-top: 22px;
+}
+
+.tea-auth-page .auth-link a,
+.tea-auth-page .auth-link ion-router-link {
+  color: #f3efe9;
+  font-weight: 700;
+}
+
+.tea-shop-page ion-content {
+  --background: var(--tea-bg);
+  background: var(--tea-bg);
+}
+
+.tea-shop-page .shop-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 12px 28px;
+}
+
+.tea-shop-page .shop-header {
+  background: rgba(20, 25, 36, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tea-shop-page .shop-title {
+  color: #f4f1ee;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  letter-spacing: -0.05em;
+  margin: 0;
+}
+
+.tea-shop-page .product-grid {
+  padding-top: 12px;
+}
+
+.tea-shop-page .tea-product-card {
+  background: var(--tea-panel);
+  border-radius: 22px;
+  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.14);
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tea-shop-page .tea-product-image {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  display: block;
+  background: #dfe7d8;
+}
+
+.tea-shop-page .tea-product-body {
+  padding: 12px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tea-shop-page .tea-product-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--tea-text);
+  margin: 0;
+}
+
+.tea-shop-page .tea-product-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tea-shop-page .tea-product-price {
+  font-weight: 700;
+  color: var(--tea-text);
+}
+
+.tea-shop-page .tea-product-stock {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: rgba(137, 167, 141, 0.14);
+  color: var(--tea-green-deep);
+}
+
+.tea-shop-page .tea-product-stock.out {
+  background: rgba(216, 91, 91, 0.12);
+  color: var(--tea-red);
+}
+
+.tea-shop-page .tea-product-cta {
+  --background: var(--tea-green);
+  --background-activated: var(--tea-green-deep);
+  --border-radius: 12px;
+  margin-top: 2px;
+  height: 42px;
+}
+
+.tea-cart-page ion-content,
+.tea-checkout-page ion-content,
+.tea-detail-page ion-content,
+.tea-confirm-page ion-content {
+  --background: var(--tea-bg);
+  background: var(--tea-bg);
+}
+
+.tea-card-panel {
+  background: var(--tea-panel);
+  border-radius: 22px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  padding: 18px 16px;
+  color: var(--tea-text);
+}
+
+.tea-summary-box {
+  background: #e9dfd1;
+  border-radius: 16px;
+  padding: 14px 14px 8px;
+}
+
+.tea-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--tea-text);
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.tea-summary-row.total {
+  font-weight: 800;
+  font-size: 1.05rem;
+  border-top: 1px solid rgba(29, 27, 26, 0.12);
+  padding-top: 12px;
+}
+
+.tea-amount {
+  font-weight: 700;
+}
+
+.tea-item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(29, 27, 26, 0.08);
+}
+
+.tea-item-row:last-child {
+  border-bottom: none;
+}
+
+.tea-item-thumb {
+  width: 62px;
+  height: 62px;
+  border-radius: 14px;
+  object-fit: cover;
+  background: #dfe7d8;
+}
+
+.tea-item-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.tea-item-name {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--tea-text);
+}
+
+.tea-item-sub {
+  margin: 4px 0 0;
+  font-size: 0.76rem;
+  color: var(--tea-text-soft);
+}
+
+.tea-qty-chip {
+  background: rgba(137, 167, 141, 0.14);
+  color: var(--tea-green-deep);
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 6px 10px;
+}
+
+@media (min-width: 768px) {
+  .tea-auth-page .auth-container,
+  .tea-shop-page .shop-inner {
+    max-width: 980px;
+  }
+}
+

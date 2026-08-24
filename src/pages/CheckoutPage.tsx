@@ -73,7 +73,7 @@ const CheckoutPage: React.FC = () => {
   );
 
   return (
-    <IonPage>
+    <IonPage className="tea-checkout-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start"><IonBackButton defaultHref="/cart" /></IonButtons>
@@ -81,55 +81,57 @@ const CheckoutPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        {error && <IonText color="danger"><p>{error}</p></IonText>}
+        <div className="tea-card-panel">
+          {error && <IonText color="danger"><p>{error}</p></IonText>}
 
-        <h3>Delivery Address</h3>
-        <IonItem>
-          <IonLabel position="stacked">Full Name</IonLabel>
-          <IonInput value={form.fullName} onIonChange={set("fullName")} />
-        </IonItem>
-        <IonItem>
-          <IonLabel position="stacked">Phone</IonLabel>
-          <IonInput type="tel" value={form.phone} onIonChange={set("phone")} />
-        </IonItem>
-        <IonItem>
-          <IonLabel position="stacked">Street Address</IonLabel>
-          <IonInput value={form.street} onIonChange={set("street")} placeholder="123 Mabini St." />
-        </IonItem>
-        <IonItem>
-          <IonLabel position="stacked">City / Municipality</IonLabel>
-          <IonInput value={form.city} onIonChange={set("city")} placeholder="Quezon City" />
-        </IonItem>
-        <IonItem>
-          <IonLabel position="stacked">Province</IonLabel>
-          <IonInput value={form.province} onIonChange={set("province")} placeholder="Metro Manila" />
-        </IonItem>
-
-        <h3 style={{ marginTop: 16 }}>Payment Method</h3>
-        <IonRadioGroup value={form.paymentMethod} onIonChange={set("paymentMethod")}>
+          <h3 style={{ margin: "0 0 12px", color: "#1d1b1a" }}>Delivery Address</h3>
           <IonItem>
-            <IonLabel>Cash on Delivery</IonLabel>
-            <IonRadio slot="end" value="cod" />
+            <IonLabel position="stacked">Full Name</IonLabel>
+            <IonInput value={form.fullName} onIonChange={set("fullName")} />
           </IonItem>
           <IonItem>
-            <IonLabel>GCash</IonLabel>
-            <IonRadio slot="end" value="gcash" />
+            <IonLabel position="stacked">Phone</IonLabel>
+            <IonInput type="tel" value={form.phone} onIonChange={set("phone")} />
           </IonItem>
-        </IonRadioGroup>
+          <IonItem>
+            <IonLabel position="stacked">Street Address</IonLabel>
+            <IonInput value={form.street} onIonChange={set("street")} placeholder="123 Mabini St." />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="stacked">City / Municipality</IonLabel>
+            <IonInput value={form.city} onIonChange={set("city")} placeholder="Quezon City" />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="stacked">Province</IonLabel>
+            <IonInput value={form.province} onIonChange={set("province")} placeholder="Metro Manila" />
+          </IonItem>
 
-        <div style={{ marginTop: 16, padding: 12, background: "#f5f5f5", borderRadius: 8 }}>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span>Subtotal</span><span>₱{subtotal.toFixed(2)}</span>
+          <h3 style={{ margin: "18px 0 12px", color: "#1d1b1a" }}>Payment Method</h3>
+          <IonRadioGroup value={form.paymentMethod} onIonChange={set("paymentMethod")}>
+            <IonItem>
+              <IonLabel>Cash on Delivery</IonLabel>
+              <IonRadio slot="end" value="cod" />
+            </IonItem>
+            <IonItem>
+              <IonLabel>GCash</IonLabel>
+              <IonRadio slot="end" value="gcash" />
+            </IonItem>
+          </IonRadioGroup>
+        </div>
+
+        <div className="tea-card-panel" style={{ marginTop: 18 }}>
+          <div className="tea-summary-row">
+            <span>Subtotal</span><span className="tea-amount">₱{subtotal.toFixed(2)}</span>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span>Delivery Fee</span><span>₱{deliveryFee.toFixed(2)}</span>
+          <div className="tea-summary-row">
+            <span>Delivery Fee</span><span className="tea-amount">₱{deliveryFee.toFixed(2)}</span>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", fontWeight: "bold", marginTop: 8 }}>
-            <span>Total</span><span>₱{total.toFixed(2)}</span>
+          <div className="tea-summary-row total">
+            <span>Total</span><span className="tea-amount">₱{total.toFixed(2)}</span>
           </div>
         </div>
 
-        <IonButton expand="block" onClick={handleSubmit} disabled={isLoading} style={{ marginTop: 16 }}>
+        <IonButton expand="block" onClick={handleSubmit} disabled={isLoading} style={{ marginTop: 18 }}>
           {isLoading ? <IonSpinner name="crescent" /> : "Place Order"}
         </IonButton>
       </IonContent>
