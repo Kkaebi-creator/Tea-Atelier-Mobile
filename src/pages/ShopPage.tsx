@@ -3,9 +3,9 @@ import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar,
   IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle,
   IonCardContent, IonButton, IonSpinner, IonText, IonBadge, IonButtons,
-  IonIcon,
+  IonIcon, IonPopover, IonList, IonItem, IonLabel,
 } from "@ionic/react";
-import { cartOutline } from "ionicons/icons";
+import { cartOutline, menuOutline, logOutOutline } from "ionicons/icons";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config/api";
 import { useCart } from "../context/CartContext";
@@ -30,6 +30,7 @@ const ShopPage: React.FC = () => {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showPopover, setShowPopover] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -52,6 +53,12 @@ const ShopPage: React.FC = () => {
       p.category.toLowerCase().includes(search.toLowerCase())
   );
 
+  const handleLogout = async () => {
+    await logout();
+    setShowPopover(false);
+    navigate("/login", { replace: true });
+  };
+
   return (
     <IonPage className="tea-shop-page">
       <IonHeader className="shop-header">
@@ -66,6 +73,27 @@ const ShopPage: React.FC = () => {
                 </IonBadge>
               )}
             </IonButton>
+            <IonButton id="menu-button">
+              <IonIcon icon={menuOutline} />
+            </IonButton>
+            <IonPopover trigger="menu-button" side="end" alignment="end">
+              <IonContent className="ion-padding">
+                <IonList>
+                  {user && (
+                    <IonItem>
+                      <IonLabel>
+                        <p>{user.firstName} {user.lastName}</p>
+                        <p style={{ fontSize: "0.8rem", color: "var(--tea-text-soft)" }}>{user.email}</p>
+                      </IonLabel>
+                    </IonItem>
+                  )}
+                  <IonItem button onClick={handleLogout}>
+                    <IonIcon icon={logOutOutline} slot="start" style={{ color: "var(--tea-red)" }} />
+                    <IonLabel style={{ color: "var(--tea-red)" }}>Sign Out</IonLabel>
+                  </IonItem>
+                </IonList>
+              </IonContent>
+            </IonPopover>
           </IonButtons>
         </IonToolbar>
         <IonToolbar>
