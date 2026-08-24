@@ -1,14 +1,19 @@
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { getUserId } from "@/lib/api-auth";
+import { addCorsHeaders, handleCorsOptions } from "@/lib/cors";
 
 function toAvailability(status: string): "In Stock" | "Out of Stock" {
   return status === "IN STOCK" ? "In Stock" : "Out of Stock";
 }
 
+export async function OPTIONS() {
+  return handleCorsOptions();
+}
+
 export async function GET(req: Request) {
   const userId = getUserId(req);
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return addCorsHeaders(NextResponse.json({ error: "Unauthorized" }, { status: 401 }));
 
   const result = await pool.query(
     `SELECT
@@ -41,16 +46,16 @@ export async function GET(req: Request) {
     quantity: row.cart_quantity,
   }));
 
-  return NextResponse.json(items);
+  return addCorsHeaders(NextResponse.json(items));
 }
 
 export async function POST(req: Request) {
   const userId = getUserId(req);
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return addCorsHeaders(NextResponse.json({ error: "Unauthorized" }, { status: 401 }));
 
   const { productId, quantity = 1 } = await req.json();
   if (!productId) {
-    return NextResponse.json({ error: "productId is required" }, { status: 400 });
+    return addCorsHeaders(NextResponse.json({ error: "productId is required" }, { status: 400 }));
   }
 
   const productResult = await pool.query(
@@ -59,7 +64,7 @@ export async function POST(req: Request) {
   );
   const product = productResult.rows[0];
   if (!product) {
-    return NextResponse.json({ error: "Product not found." }, { status: 404 });
+    return addCorsHeaders(NextResponse.json({ error: "Product not found." }, { status: 404 }));
   }
 
   const existing = await pool.query(
@@ -71,10 +76,10 @@ export async function POST(req: Request) {
   const newTotalQuantity = currentCartQuantity + quantity;
 
   if (newTotalQuantity > product.stock_quantity) {
-    return NextResponse.json(
+    return addCorsHeaders(NextResponse.json(
       { error: `Only ${product.stock_quantity} in stock.` },
       { status: 400 }
-    );
+    ));
   }
 
   if (existing.rows.length > 0) {
@@ -89,13 +94,13 @@ export async function POST(req: Request) {
     );
   }
 
-  return NextResponse.json({ success: true });
+  return addCorsHeaders(NextResponse.json({ success: true }));
 }
 
 export async function DELETE(req: Request) {
   const userId = getUserId(req);
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return addCorsHeaders(NextResponse.json({ error: "Unauthorized" }, { status: 401 }));
 
   await pool.query("DELETE FROM cart WHERE user_id = $1", [userId]);
-  return NextResponse.json({ success: true });
+  return addCorsHeaders(NextResponse.json({ success: true }));
 }

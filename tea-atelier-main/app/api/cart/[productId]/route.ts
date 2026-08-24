@@ -1,18 +1,23 @@
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { getUserId } from "@/lib/api-auth";
+import { addCorsHeaders, handleCorsOptions } from "@/lib/cors";
+
+export async function OPTIONS() {
+  return handleCorsOptions();
+}
 
 export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ productId: string }> }
 ) {
   const userId = getUserId(req);
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return addCorsHeaders(NextResponse.json({ error: "Unauthorized" }, { status: 401 }));
 
   const { productId } = await params;
   const { quantity } = await req.json();
   if (!quantity || quantity < 1) {
-    return NextResponse.json({ error: "quantity must be at least 1" }, { status: 400 });
+    return addCorsHeaders(NextResponse.json({ error: "quantity must be at least 1" }, { status: 400 }));
   }
 
   const productResult = await pool.query(
@@ -21,21 +26,21 @@ export async function PATCH(
   );
   const product = productResult.rows[0];
   if (!product) {
-    return NextResponse.json({ error: "Product not found." }, { status: 404 });
+    return addCorsHeaders(NextResponse.json({ error: "Product not found." }, { status: 404 }));
   }
 
   if (quantity > product.stock_quantity) {
-    return NextResponse.json(
+    return addCorsHeaders(NextResponse.json(
       { error: `Only ${product.stock_quantity} in stock.` },
       { status: 400 }
-    );
+    ));
   }
 
   await pool.query(
     "UPDATE cart SET quantity = $1 WHERE user_id = $2 AND product_id = $3",
     [quantity, userId, productId]
   );
-  return NextResponse.json({ success: true });
+  return addCorsHeaders(NextResponse.json({ success: true }));
 }
 
 export async function DELETE(
@@ -43,7 +48,7 @@ export async function DELETE(
   { params }: { params: Promise<{ productId: string }> }
 ) {
   const userId = getUserId(req);
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return addCorsHeaders(NextResponse.json({ error: "Unauthorized" }, { status: 401 }));
 
   const { productId } = await params;
 
@@ -51,5 +56,5 @@ export async function DELETE(
     "DELETE FROM cart WHERE user_id = $1 AND product_id = $2",
     [userId, productId]
   );
-  return NextResponse.json({ success: true });
+  return addCorsHeaders(NextResponse.json({ success: true }));
 }

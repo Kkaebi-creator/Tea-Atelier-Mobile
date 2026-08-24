@@ -1,11 +1,25 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let resend: Resend | null = null;
+
+function getResend() {
+  if (!process.env.RESEND_API_KEY) {
+    console.warn("RESEND_API_KEY not set - email sending will fail");
+    return null;
+  }
+  if (!resend) {
+    resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return resend;
+}
 
 export async function sendVerificationEmail(to: string, token: string) {
+  const client = getResend();
+  if (!client) return;
+
   const verifyUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/verify-email?token=${token}`;
 
-  await resend.emails.send({
+  await client.emails.send({
     from: `Tea Atelier <${process.env.EMAIL_FROM}>`,
     to,
     subject: "Verify your Tea Atelier account",
@@ -25,9 +39,12 @@ export async function sendVerificationEmail(to: string, token: string) {
 }
 
 export async function sendPasswordResetEmail(to: string, token: string) {
+  const client = getResend();
+  if (!client) return;
+
   const resetUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password?token=${token}`;
 
-  await resend.emails.send({
+  await client.emails.send({
     from: `Tea Atelier <${process.env.EMAIL_FROM}>`,
     to,
     subject: "Reset your Tea Atelier password",
@@ -47,7 +64,10 @@ export async function sendPasswordResetEmail(to: string, token: string) {
 }
 
 export async function sendWelcomeEmail(to: string, firstName: string) {
-  await resend.emails.send({
+  const client = getResend();
+  if (!client) return;
+
+  await client.emails.send({
     from: `Tea Atelier <${process.env.EMAIL_FROM}>`,
     to,
     subject: "Welcome to Tea Atelier!",

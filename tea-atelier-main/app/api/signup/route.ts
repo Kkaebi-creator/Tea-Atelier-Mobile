@@ -2,23 +2,28 @@ import { NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { hashPassword, signToken } from "@/lib/auth-server";
 import { sendVerificationEmail } from "@/lib/email";
+import { addCorsHeaders, handleCorsOptions } from "@/lib/cors";
 import crypto from "crypto";
+
+export async function OPTIONS() {
+  return handleCorsOptions();
+}
 
 export async function POST(req: Request) {
   try {
     const { firstName, lastName, email, phoneNumber, password } = await req.json();
 
     if (!firstName || !lastName || !email || !password) {
-      return NextResponse.json({ error: "All fields are required." }, { status: 400 });
+      return addCorsHeaders(NextResponse.json({ error: "All fields are required." }, { status: 400 }));
     }
 
     if (password.length < 8) {
-      return NextResponse.json({ error: "Password must be at least 8 characters." }, { status: 400 });
+      return addCorsHeaders(NextResponse.json({ error: "Password must be at least 8 characters." }, { status: 400 }));
     }
 
     const existing = await pool.query("SELECT user_id FROM users WHERE email = $1", [email]);
     if (existing.rows.length > 0) {
-      return NextResponse.json({ error: "An account with this email already exists." }, { status: 409 });
+      return addCorsHeaders(NextResponse.json({ error: "An account with this email already exists." }, { status: 409 }));
     }
 
     if (phoneNumber) {
@@ -27,7 +32,7 @@ export async function POST(req: Request) {
         [phoneNumber]
       );
       if (existingPhone.rows.length > 0) {
-        return NextResponse.json({ error: "An account with this phone number already exists." }, { status: 409 });
+        return addCorsHeaders(NextResponse.json({ error: "An account with this phone number already exists." }, { status: 409 }));
       }
     }
 
@@ -52,7 +57,7 @@ export async function POST(req: Request) {
       // Don't fail the whole signup just because the email didn't send
     }
 
-    return NextResponse.json({
+    return addCorsHeaders(NextResponse.json({
       token,
       user: {
         name: `${user.first_name} ${user.last_name}`,
@@ -62,9 +67,9 @@ export async function POST(req: Request) {
         phone: user.phone_number,
         role: user.role,
       },
-    });
+    }));
   } catch (error) {
     console.error("Signup error:", error);
-    return NextResponse.json({ error: "Unable to create account." }, { status: 500 });
+    return addCorsHeaders(NextResponse.json({ error: "Unable to create account." }, { status: 500 }));
   }
 }

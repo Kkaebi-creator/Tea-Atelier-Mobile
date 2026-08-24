@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/db";
+import { addCorsHeaders, handleCorsOptions } from "@/lib/cors";
+
+export async function OPTIONS() {
+  return handleCorsOptions();
+}
 
 export async function GET(
   req: Request,
@@ -16,7 +21,7 @@ export async function GET(
 
     const row = result.rows[0];
     if (!row) {
-      return NextResponse.json({ error: "Product not found." }, { status: 404 });
+      return addCorsHeaders(NextResponse.json({ error: "Product not found." }, { status: 404 }));
     }
 
     const product = {
@@ -30,8 +35,8 @@ export async function GET(
       stockQuantity: row.stock_quantity,
     };
 
-    return NextResponse.json({ product });
+    return addCorsHeaders(NextResponse.json({ product }));
   } catch (error) {
-    return NextResponse.json({ error: "Unable to load product." }, { status: 500 });
+    return addCorsHeaders(NextResponse.json({ error: "Unable to load product." }, { status: 500 }));
   }
 }

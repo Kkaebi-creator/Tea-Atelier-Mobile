@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { getUserId } from "@/lib/api-auth";
+import { addCorsHeaders, handleCorsOptions } from "@/lib/cors";
+
+export async function OPTIONS() {
+  return handleCorsOptions();
+}
 
 export async function GET(req: Request) {
   const userId = getUserId(req);
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return addCorsHeaders(NextResponse.json({ error: "Unauthorized" }, { status: 401 }));
 
   const url = new URL(req.url);
   const page = parseInt(url.searchParams.get("page") || "1", 10);
@@ -55,17 +60,17 @@ export async function GET(req: Request) {
     })
   );
 
-  return NextResponse.json({ orders, totalPages, currentPage: page });
+  return addCorsHeaders(NextResponse.json({ orders, totalPages, currentPage: page }));
 }
 
 export async function POST(req: Request) {
   const userId = getUserId(req);
-  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) return addCorsHeaders(NextResponse.json({ error: "Unauthorized" }, { status: 401 }));
 
   const { street, city, province, deliveryFee, paymentMethod, phone, fullName } = await req.json();
 
   if (!street || !city || !province) {
-    return NextResponse.json({ error: "All address fields are required." }, { status: 400 });
+    return addCorsHeaders(NextResponse.json({ error: "All address fields are required." }, { status: 400 }));
   }
 
   const client = await pool.connect();
@@ -84,17 +89,17 @@ export async function POST(req: Request) {
 
     if (cartResult.rows.length === 0) {
       await client.query("ROLLBACK");
-      return NextResponse.json({ error: "Your cart is empty." }, { status: 400 });
+      return addCorsHeaders(NextResponse.json({ error: "Your cart is empty." }, { status: 400 }));
     }
 
     // Verify stock is still sufficient for every item 
     for (const item of cartResult.rows) {
       if (item.quantity > item.stock_quantity) {
         await client.query("ROLLBACK");
-        return NextResponse.json(
+        return addCorsHeaders(NextResponse.json(
           { error: `Only ${item.stock_quantity} left of ${item.product_name}.` },
           { status: 400 }
-        );
+        ));
       }
     }
 
@@ -143,15 +148,15 @@ export async function POST(req: Request) {
 
     await client.query("COMMIT");
 
-    return NextResponse.json({
+    return addCorsHeaders(NextResponse.json({
       orderId,
       subtotal: subtotal.toFixed(2),
       deliveryFee: shippingCost.toFixed(2),
       total: totalAmount.toFixed(2),
-    });
+    }));
   } catch (error) {
     await client.query("ROLLBACK");
-    return NextResponse.json({ error: "Unable to place order." }, { status: 500 });
+    return addCorsHeaders(NextResponse.json({ error: "Unable to place order." }, { status: 500 }));
   } finally {
     client.release();
   }

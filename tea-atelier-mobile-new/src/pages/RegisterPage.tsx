@@ -20,6 +20,10 @@ const RegisterPage: React.FC = () => {
 
   const handleSubmit = async () => {
     setError("");
+    if (!form.firstName || !form.lastName || !form.email || !form.password) {
+      setError("All fields are required.");
+      return;
+    }
     if (form.password.length < 8) { setError("Password must be at least 8 characters."); return; }
     setIsLoading(true);
     try {
@@ -40,44 +44,53 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <IonPage>
+    <IonPage className="tea-auth-page">
       <IonHeader>
         <IonToolbar>
           <IonTitle>Create Account</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        {error && <IonText color="danger"><p>{error}</p></IonText>}
+        <div className="auth-container">
+          <h2 className="auth-title">Tea Atelier</h2>
 
-        <IonItem>
-          <IonLabel position="stacked">First Name</IonLabel>
-          <IonInput value={form.firstName} onIonChange={set("firstName")} placeholder="Juan" />
-        </IonItem>
-        <IonItem>
-          <IonLabel position="stacked">Last Name</IonLabel>
-          <IonInput value={form.lastName} onIonChange={set("lastName")} placeholder="Dela Cruz" />
-        </IonItem>
-        <IonItem>
-          <IonLabel position="stacked">Email</IonLabel>
-          <IonInput type="email" value={form.email} onIonChange={set("email")} placeholder="you@example.com" />
-        </IonItem>
-        <IonItem>
-          <IonLabel position="stacked">Phone (optional)</IonLabel>
-          <IonInput type="tel" value={form.phoneNumber} onIonChange={set("phoneNumber")} placeholder="+63 9XX XXX XXXX" />
-        </IonItem>
-        <IonItem>
-          <IonLabel position="stacked">Password</IonLabel>
-          <IonInput type="password" value={form.password} onIonChange={set("password")} placeholder="Min. 8 characters" />
-        </IonItem>
+          {error && <IonText className="error-text">{error}</IonText>}
 
-        <IonButton expand="block" onClick={handleSubmit} disabled={isLoading} style={{ marginTop: 16 }}>
-          {isLoading ? <IonSpinner name="crescent" /> : "Create Account"}
-        </IonButton>
+          <div className="auth-form">
+            <label className="field-label">First Name</label>
+            <IonItem className="soft-field">
+              <IonInput value={form.firstName} onIonChange={set("firstName")} placeholder="First name" />
+            </IonItem>
 
-        <p style={{ textAlign: "center", marginTop: 16 }}>
-          Already have an account?{" "}
-          <IonRouterLink routerLink="/login">Sign In</IonRouterLink>
-        </p>
+            <label className="field-label">Last Name</label>
+            <IonItem className="soft-field">
+              <IonInput value={form.lastName} onIonChange={set("lastName")} placeholder="Last name" />
+            </IonItem>
+
+            <label className="field-label">Email</label>
+            <IonItem className="soft-field">
+              <IonInput type="email" value={form.email} onIonChange={set("email")} placeholder="you@example.com" />
+            </IonItem>
+
+            <label className="field-label">Phone (Optional)</label>
+            <IonItem className="soft-field">
+              <IonInput type="tel" value={form.phoneNumber} onIonChange={set("phoneNumber")} placeholder="+1 234 567 8900" />
+            </IonItem>
+
+            <label className="field-label">Password</label>
+            <IonItem className="soft-field">
+              <IonInput type="password" value={form.password} onIonChange={set("password")} placeholder="Create a password (min 8 characters)" />
+            </IonItem>
+
+            <IonButton className="auth-button" expand="block" onClick={handleSubmit} disabled={isLoading}>
+              {isLoading ? <IonSpinner name="crescent" /> : "Create Account"}
+            </IonButton>
+
+            <p className="auth-link">
+              Already have an account? <IonRouterLink routerLink="/login">Sign In</IonRouterLink>
+            </p>
+          </div>
+        </div>
       </IonContent>
     </IonPage>
   );

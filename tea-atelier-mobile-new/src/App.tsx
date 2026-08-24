@@ -1,7 +1,7 @@
-import { Navigate, Route } from 'react-router-dom';
+import { Navigate, Route, useLocation } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -36,28 +36,61 @@ import '@ionic/react/css/display.css';
 
 /* import '@ionic/react/css/palettes/dark.always.css'; */
 /* import '@ionic/react/css/palettes/dark.class.css'; */
-import '@ionic/react/css/palettes/dark.system.css';
+/* import '@ionic/react/css/palettes/dark.system.css'; */
 
 /* Theme variables */
 import './theme/variables.css';
 
 setupIonicReact();
 
+const ProtectedRoute: React.FC<{ element: React.ReactNode }> = ({ element }) => {
+  const { token, isLoading } = useAuth();
+  const location = useLocation();
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (!token) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
+
+  return <>{element}</>;
+};
+
+const AuthRoute: React.FC<{ element: React.ReactNode }> = ({ element }) => {
+  const { token, isLoading } = useAuth();
+
+  if (isLoading) {
+    return null;
+  }
+
+  if (token) {
+    return <Navigate to="/shop" replace />;
+  }
+
+  return <>{element}</>;
+};
+
+const AppRoutes: React.FC = () => (
+  <IonRouterOutlet>
+    <Route path="/login" element={<AuthRoute element={<LoginPage />} />} />
+    <Route path="/register" element={<AuthRoute element={<RegisterPage />} />} />
+    <Route path="/shop" element={<ProtectedRoute element={<ShopPage />} />} />
+    <Route path="/product/:id" element={<ProtectedRoute element={<ProductDetailPage />} />} />
+    <Route path="/cart" element={<ProtectedRoute element={<CartPage />} />} />
+    <Route path="/checkout" element={<ProtectedRoute element={<CheckoutPage />} />} />
+    <Route path="/order-confirmation/:orderId" element={<ProtectedRoute element={<OrderConfirmationPage />} />} />
+    <Route path="/" element={<Navigate to="/shop" replace />} />
+  </IonRouterOutlet>
+);
+
 const App: React.FC = () => (
   <IonApp>
     <AuthProvider>
       <IonReactRouter>
         <CartProvider>
-          <IonRouterOutlet>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/shop" element={<ShopPage />} />
-            <Route path="/product/:id" element={<ProductDetailPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="/order-confirmation/:orderId" element={<OrderConfirmationPage />} />
-            <Route path="/" element={<Navigate to="/shop" replace />} />
-          </IonRouterOutlet>
+          <AppRoutes />
         </CartProvider>
       </IonReactRouter>
     </AuthProvider>

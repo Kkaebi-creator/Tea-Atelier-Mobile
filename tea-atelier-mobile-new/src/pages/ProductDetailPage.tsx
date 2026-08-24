@@ -71,7 +71,7 @@ const ProductDetailPage: React.FC = () => {
   );
 
   return (
-    <IonPage>
+    <IonPage className="tea-detail-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -81,21 +81,23 @@ const ProductDetailPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <img src={product.image} alt={product.name} style={{ width: "100%", maxHeight: 300, objectFit: "cover" }} />
+        <img src={product.image} alt={product.name} style={{ width: "100%", maxHeight: 300, objectFit: "cover", display: "block" }} />
         <div className="ion-padding">
-          <h2>{product.name}</h2>
-          <p style={{ color: "#888", fontSize: 13 }}>{product.category}</p>
-          <h3 style={{ color: "#5a7a52" }}>₱{product.price.toFixed(2)}</h3>
-          <p style={{ color: product.availability === "In Stock" ? "green" : "red", fontWeight: "bold" }}>
-            {product.availability}
-          </p>
-          <p style={{ lineHeight: 1.6, color: "#555" }}>{product.description}</p>
+          <div className="tea-card-panel" style={{ marginTop: 16 }}>
+            <h2 style={{ margin: "0 0 8px", color: "#1d1b1a" }}>{product.name}</h2>
+            <p style={{ color: "#6d6a64", fontSize: 13, margin: "0 0 12px" }}>{product.category}</p>
+            <h3 style={{ color: "#5d7b5e", margin: "0 0 10px" }}>₱{product.price.toFixed(2)}</h3>
+            <p style={{ color: product.availability === "In Stock" ? "#4a8f60" : "#d85b5b", fontWeight: "700", margin: "0 0 12px" }}>
+              {product.availability}
+            </p>
+            <p style={{ lineHeight: 1.6, color: "#36352f", margin: 0 }}>{product.description}</p>
+          </div>
 
           <IonButton
             expand="block"
             disabled={product.availability !== "In Stock" || adding}
             onClick={handleAddToCart}
-            style={{ marginTop: 16 }}
+            style={{ marginTop: 18 }}
           >
             {adding ? <IonSpinner name="crescent" /> : "Add to Cart"}
           </IonButton>

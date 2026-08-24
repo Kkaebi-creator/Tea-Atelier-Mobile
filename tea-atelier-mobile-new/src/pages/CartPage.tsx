@@ -31,49 +31,53 @@ const CartPage: React.FC = () => {
   );
 
   return (
-    <IonPage>
+    <IonPage className="tea-cart-page">
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start"><IonBackButton defaultHref="/shop" /></IonButtons>
-          <IonTitle>Cart ({itemCount})</IonTitle>
+          <IonTitle>Your Cart</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        {isLoading && (
-          <div style={{ display: "flex", justifyContent: "center", padding: 32 }}>
-            <IonSpinner name="crescent" />
-          </div>
-        )}
+      <IonContent className="ion-padding">
+        <div className="tea-card-panel">
+          {isLoading && (
+            <div style={{ display: "flex", justifyContent: "center", padding: 32 }}>
+              <IonSpinner name="crescent" />
+            </div>
+          )}
 
-        {!isLoading && items.length === 0 && (
-          <div className="ion-padding ion-text-center">
-            <IonText><p>Your cart is empty.</p></IonText>
-            <IonButton routerLink="/shop">Continue Shopping</IonButton>
-          </div>
-        )}
+          {!isLoading && items.length === 0 && (
+            <div className="ion-text-center">
+              <IonText><p>Your cart is empty.</p></IonText>
+              <IonButton routerLink="/shop">Continue Shopping</IonButton>
+            </div>
+          )}
 
-        <IonList>
           {items.map((item) => (
-            <IonItem key={item.product.id}>
-              <IonThumbnail slot="start">
-                <img src={item.product.image} alt={item.product.name} style={{ objectFit: "cover" }} />
-              </IonThumbnail>
-              <IonLabel>
-                <h3>{item.product.name}</h3>
-                <p>₱{item.product.price.toFixed(2)} × {item.quantity}</p>
-                <p style={{ fontWeight: "bold" }}>₱{(item.product.price * item.quantity).toFixed(2)}</p>
-              </IonLabel>
-            </IonItem>
+            <div className="tea-item-row" key={item.product.id}>
+              <img src={item.product.image} alt={item.product.name} className="tea-item-thumb" />
+              <div className="tea-item-copy">
+                <p className="tea-item-name">{item.product.name}</p>
+                <p className="tea-item-sub">₱{item.product.price.toFixed(2)} × {item.quantity}</p>
+              </div>
+              <span className="tea-qty-chip">{item.quantity}</span>
+            </div>
           ))}
-        </IonList>
+        </div>
 
         {items.length > 0 && (
-          <div className="ion-padding">
-            <IonItem lines="none">
-              <IonLabel><strong>Total</strong></IonLabel>
-              <IonText slot="end"><strong>₱{total.toFixed(2)}</strong></IonText>
-            </IonItem>
-            <IonButton expand="block" onClick={() => navigate("/checkout")} style={{ marginTop: 8 }}>
+          <div className="tea-card-panel" style={{ marginTop: 18 }}>
+            <div className="tea-summary-box">
+              <div className="tea-summary-row">
+                <span>Subtotal</span>
+                <span className="tea-amount">₱{total.toFixed(2)}</span>
+              </div>
+              <div className="tea-summary-row total">
+                <span>Total</span>
+                <span className="tea-amount">₱{total.toFixed(2)}</span>
+              </div>
+            </div>
+            <IonButton expand="block" onClick={() => navigate("/checkout")} style={{ marginTop: 16 }}>
               Proceed to Checkout
             </IonButton>
             <IonButton expand="block" fill="outline" color="danger" onClick={clearCart} style={{ marginTop: 8 }}>
