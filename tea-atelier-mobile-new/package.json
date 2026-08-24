@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "start": "serve dist --listen $PORT",
+    "start": "serve -s dist -l $PORT",
     "preview": "vite preview",
     "test.e2e": "cypress run",
     "test.unit": "vitest",
