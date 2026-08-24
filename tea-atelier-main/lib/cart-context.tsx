@@ -4,6 +4,7 @@ import { createContext, useContext, useState, ReactNode, useEffect } from "react
 import { useRouter, usePathname } from "next/navigation";
 import { Product } from "./products";
 import { useAuth } from "./auth-context";
+import { API_URL } from "./api-url";
 
 type CartItem = { product: Product; quantity: number };
 

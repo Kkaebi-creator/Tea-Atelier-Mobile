@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { API_URL } from "@/lib/api-url";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");

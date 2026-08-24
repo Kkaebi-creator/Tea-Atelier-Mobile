@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ShieldCheck } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import { API_URL } from "@/lib/api-url";
 
 export default function AdminLoginPage() {
   const { login, user, isLoading: authLoading } = useAuth();

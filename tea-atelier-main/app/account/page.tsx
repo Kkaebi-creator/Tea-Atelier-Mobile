@@ -15,6 +15,7 @@ import {
   SecurityPanelSkeleton,
 } from "@/components/account/Skeletons";
 import { Plus, Trash2, MapPin, Package } from "lucide-react";
+import { API_URL } from "@/lib/api-url";
 
 type TabKey = "profile" | "orders" | "settings";
 

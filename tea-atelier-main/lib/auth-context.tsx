@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
+import { API_URL } from "./api-url";
 
 type User = {
   name: string;

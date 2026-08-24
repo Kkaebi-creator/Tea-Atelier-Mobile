@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useCart } from "@/lib/cart-context";
+import { API_URL } from "@/lib/api-url";
 import type { Product } from "@/lib/products";
 
 const offsets = [

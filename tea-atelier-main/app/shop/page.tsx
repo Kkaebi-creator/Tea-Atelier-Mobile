@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
+import { API_URL } from "@/lib/api-url";
 import type { Product } from "@/lib/products";
 import { categoryTree, type MainCategory } from "@/lib/categories";
 

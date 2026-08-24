@@ -11,6 +11,7 @@ import {
   Cell,
   CartesianGrid,
 } from "recharts";
+import { API_URL } from "@/lib/api-url";
 
 type TopProduct = {
   id: number;

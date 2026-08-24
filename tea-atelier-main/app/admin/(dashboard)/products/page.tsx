@@ -18,6 +18,7 @@ import type { Product } from "@/lib/products";
 import { categoryTree, type MainCategory } from "@/lib/categories";
 import ConfirmDialog from "@/components/account/ConfirmDialog";
 import { SkeletonBlock } from "@/components/Skeleton";
+import { API_URL } from "@/lib/api-url";
 
 const emptyForm = {
   name: "",

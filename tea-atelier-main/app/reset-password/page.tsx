@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { API_URL } from "@/lib/api-url";
 
 function ResetPasswordForm() {
   const searchParams = useSearchParams();

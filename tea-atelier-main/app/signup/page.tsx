@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
+import { API_URL } from "@/lib/api-url";
 
 export default function SignupPage() {
   const { login } = useAuth();
