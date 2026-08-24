@@ -1,36 +1,46 @@
 :root {
-  --tea-bg: #0f1523;
-  --tea-bg-2: #171d2a;
-  --tea-panel: #f4efe8;
-  --tea-panel-strong: #e9dfd1;
-  --tea-card: #f8f4ee;
-  --tea-text: #1d1b1a;
-  --tea-text-soft: #4d4b49;
-  --tea-green: #89a78d;
-  --tea-green-deep: #67866d;
-  --tea-gold: #d5b47c;
-  --tea-red: #d85b5b;
-  --tea-border: rgba(255, 255, 255, 0.08);
-  --tea-shadow: rgba(0, 0, 0, 0.24);
+  --tea-bg: #f5f1ed;
+  --tea-bg-2: #ede7e0;
+  --tea-panel: #fdfbf8;
+  --tea-panel-strong: #f9f5f0;
+  --tea-card: #ffffff;
+  --tea-text: #2d2520;
+  --tea-text-soft: #6b6460;
+  --tea-green: #7d9982;
+  --tea-green-deep: #6a8470;
+  --tea-gold: #c5a572;
+  --tea-red: #c85a5a;
+  --tea-border: rgba(45, 37, 32, 0.08);
+  --tea-shadow: rgba(0, 0, 0, 0.08);
 
   --ion-background-color: var(--tea-bg);
-  --ion-background-color-rgb: 15, 21, 35;
-  --ion-text-color: #f4f1ee;
-  --ion-text-color-rgb: 244, 241, 238;
+  --ion-background-color-rgb: 245, 241, 237;
+  --ion-text-color: var(--tea-text);
+  --ion-text-color-rgb: 45, 37, 32;
   --ion-border-color: var(--tea-border);
   --ion-item-background: transparent;
-  --ion-toolbar-background: rgba(18, 24, 34, 0.9);
+  --ion-toolbar-background: var(--tea-panel);
   --ion-toolbar-border-color: transparent;
-  --ion-card-background: var(--tea-panel);
+  --ion-card-background: var(--tea-card);
   --ion-card-color: var(--tea-text);
   --ion-color-primary: var(--tea-green);
   --ion-color-primary-contrast: #ffffff;
-  --ion-color-step-50: #141a2a;
-  --ion-color-step-100: #1a2130;
-  --ion-color-step-150: #202a3b;
-  --ion-color-step-200: #263042;
-  --ion-color-step-250: #2e3a4d;
-  --ion-color-step-300: #35425a;
+  --ion-color-step-50: #ede7e0;
+  --ion-color-step-100: #e6dfd6;
+  --ion-color-step-150: #dfd8cd;
+  --ion-color-step-200: #d8d0c3;
+  --ion-color-step-250: #d1c8ba;
+  --ion-color-step-300: #cac0b0;
+
+  --ion-icon-color: var(--tea-text);
+}
+
+ion-icon {
+  color: var(--tea-text) !important;
+}
+
+ion-button ion-icon {
+  color: inherit;
 }
 
 html,
@@ -55,9 +65,9 @@ ion-content {
 ion-header,
 ion-toolbar,
 ion-header::after {
-  --background: rgba(20, 25, 36, 0.9);
-  background: rgba(20, 25, 36, 0.9) !important;
-  box-shadow: none !important;
+  --background: var(--tea-panel);
+  background: var(--tea-panel) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
   border: none !important;
 }
 
@@ -71,15 +81,15 @@ ion-title {
   font-size: clamp(1.4rem, 3vw, 2rem);
   font-weight: 700;
   letter-spacing: -0.05em;
-  color: #f3efe9;
+  color: var(--tea-text);
 }
 
 ion-searchbar {
-  --background: rgba(255, 255, 255, 0.06);
-  --color: #f3efe9;
-  --placeholder-color: rgba(243, 239, 233, 0.55);
-  --icon-color: rgba(243, 239, 233, 0.8);
-  --clear-button-color: rgba(243, 239, 233, 0.8);
+  --background: rgba(45, 37, 32, 0.06);
+  --color: var(--tea-text);
+  --placeholder-color: rgba(45, 37, 32, 0.5);
+  --icon-color: rgba(45, 37, 32, 0.6);
+  --clear-button-color: rgba(45, 37, 32, 0.6);
   --box-shadow: none;
   border-radius: 16px;
   margin: 0 14px 8px;
@@ -114,12 +124,12 @@ ion-button:not([fill='outline']) {
 ion-button[fill='outline'] {
   --background: transparent;
   --color: var(--tea-green);
-  --border-color: rgba(137, 167, 141, 0.7);
+  --border-color: rgba(125, 153, 130, 0.5);
 }
 
 ion-item {
   --background: transparent;
-  --color: #f3efe9;
+  --color: var(--tea-text);
   --padding-start: 0;
   --padding-end: 0;
   --inner-padding-end: 0;
@@ -129,18 +139,18 @@ ion-item {
 }
 
 ion-label {
-  color: #f3efe9 !important;
+  color: var(--tea-text) !important;
 }
 
 ion-input,
 ion-textarea {
-  --background: rgba(255, 255, 255, 0.04);
-  --color: #f3efe9;
-  --placeholder-color: rgba(243, 239, 233, 0.5);
+  --background: rgba(45, 37, 32, 0.04);
+  --color: var(--tea-text);
+  --placeholder-color: rgba(45, 37, 32, 0.5);
   border-radius: 14px;
   min-height: 52px;
   padding: 14px 16px !important;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(45, 37, 32, 0.08);
 }
 
 ion-input::part(native),
@@ -149,12 +159,13 @@ ion-textarea::part(native) {
 }
 
 ion-card {
-  --background: var(--tea-panel);
+  --background: var(--tea-card);
   --color: var(--tea-text);
   border-radius: 22px;
-  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   margin: 0;
   overflow: hidden;
+  border: 1px solid rgba(45, 37, 32, 0.06);
 }
 
 ion-card-title,
@@ -176,7 +187,7 @@ ion-card-content {
 }
 
 .tea-auth-page .auth-title {
-  color: #f3efe9;
+  color: var(--tea-text);
   font-weight: 700;
   font-size: clamp(2.1rem, 5vw, 3.1rem);
   letter-spacing: -0.06em;
@@ -189,16 +200,17 @@ ion-card-content {
 }
 
 .tea-auth-page .error-text {
-  color: #ff8891;
+  color: var(--tea-red);
   font-weight: 600;
   margin: 0 0 16px;
 }
 
 .tea-auth-page .field-label {
-  color: rgba(243, 239, 233, 0.8);
+  color: rgba(45, 37, 32, 0.8);
   display: block;
   margin: 22px 0 10px;
   font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .tea-auth-page .soft-field {
@@ -206,8 +218,8 @@ ion-card-content {
 }
 
 .tea-auth-page .soft-field ion-input {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(45, 37, 32, 0.04);
+  border: 1px solid rgba(45, 37, 32, 0.08);
 }
 
 .tea-auth-page .auth-button {
@@ -216,13 +228,13 @@ ion-card-content {
 
 .tea-auth-page .auth-link {
   text-align: center;
-  color: rgba(243, 239, 233, 0.8);
+  color: rgba(45, 37, 32, 0.8);
   margin-top: 22px;
 }
 
 .tea-auth-page .auth-link a,
 .tea-auth-page .auth-link ion-router-link {
-  color: #f3efe9;
+  color: var(--tea-text);
   font-weight: 700;
 }
 
@@ -238,12 +250,12 @@ ion-card-content {
 }
 
 .tea-shop-page .shop-header {
-  background: rgba(20, 25, 36, 0.95);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--tea-panel);
+  border-bottom: 1px solid rgba(45, 37, 32, 0.06);
 }
 
 .tea-shop-page .shop-title {
-  color: #f4f1ee;
+  color: var(--tea-text);
   font-weight: 700;
   font-size: clamp(1.5rem, 4vw, 2.1rem);
   letter-spacing: -0.05em;
@@ -255,9 +267,10 @@ ion-card-content {
 }
 
 .tea-shop-page .tea-product-card {
-  background: var(--tea-panel);
+  background: var(--tea-card);
   border-radius: 22px;
-  box-shadow: 0 12px 22px rgba(0, 0, 0, 0.14);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(45, 37, 32, 0.06);
   min-height: 100%;
   display: flex;
   flex-direction: column;
@@ -269,7 +282,7 @@ ion-card-content {
   height: 170px;
   object-fit: cover;
   display: block;
-  background: #dfe7d8;
+  background: #e8e3de;
 }
 
 .tea-shop-page .tea-product-body {
@@ -277,6 +290,7 @@ ion-card-content {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  background: var(--tea-card);
 }
 
 .tea-shop-page .tea-product-name {
@@ -302,12 +316,12 @@ ion-card-content {
   font-weight: 700;
   padding: 6px 8px;
   border-radius: 999px;
-  background: rgba(137, 167, 141, 0.14);
+  background: rgba(125, 153, 130, 0.12);
   color: var(--tea-green-deep);
 }
 
 .tea-shop-page .tea-product-stock.out {
-  background: rgba(216, 91, 91, 0.12);
+  background: rgba(200, 90, 90, 0.12);
   color: var(--tea-red);
 }
 
@@ -328,17 +342,19 @@ ion-card-content {
 }
 
 .tea-card-panel {
-  background: var(--tea-panel);
+  background: var(--tea-card);
   border-radius: 22px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(45, 37, 32, 0.06);
   padding: 18px 16px;
   color: var(--tea-text);
 }
 
 .tea-summary-box {
-  background: #e9dfd1;
+  background: rgba(45, 37, 32, 0.04);
   border-radius: 16px;
   padding: 14px 14px 8px;
+  border: 1px solid rgba(45, 37, 32, 0.06);
 }
 
 .tea-summary-row {
