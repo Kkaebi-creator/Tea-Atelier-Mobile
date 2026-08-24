@@ -20,6 +20,10 @@ const RegisterPage: React.FC = () => {
 
   const handleSubmit = async () => {
     setError("");
+    if (!form.firstName || !form.lastName || !form.email || !form.password) {
+      setError("All fields are required.");
+      return;
+    }
     if (form.password.length < 8) { setError("Password must be at least 8 characters."); return; }
     setIsLoading(true);
     try {
@@ -53,9 +57,14 @@ const RegisterPage: React.FC = () => {
           {error && <IonText className="error-text">{error}</IonText>}
 
           <div className="auth-form">
-            <label className="field-label">Full Name</label>
+            <label className="field-label">First Name</label>
             <IonItem className="soft-field">
-              <IonInput value={form.firstName} onIonChange={set("firstName")} placeholder="Your name" />
+              <IonInput value={form.firstName} onIonChange={set("firstName")} placeholder="First name" />
+            </IonItem>
+
+            <label className="field-label">Last Name</label>
+            <IonItem className="soft-field">
+              <IonInput value={form.lastName} onIonChange={set("lastName")} placeholder="Last name" />
             </IonItem>
 
             <label className="field-label">Email</label>
@@ -63,9 +72,14 @@ const RegisterPage: React.FC = () => {
               <IonInput type="email" value={form.email} onIonChange={set("email")} placeholder="you@example.com" />
             </IonItem>
 
+            <label className="field-label">Phone (Optional)</label>
+            <IonItem className="soft-field">
+              <IonInput type="tel" value={form.phoneNumber} onIonChange={set("phoneNumber")} placeholder="+1 234 567 8900" />
+            </IonItem>
+
             <label className="field-label">Password</label>
             <IonItem className="soft-field">
-              <IonInput type="password" value={form.password} onIonChange={set("password")} placeholder="Create a password" />
+              <IonInput type="password" value={form.password} onIonChange={set("password")} placeholder="Create a password (min 8 characters)" />
             </IonItem>
 
             <IonButton className="auth-button" expand="block" onClick={handleSubmit} disabled={isLoading}>
