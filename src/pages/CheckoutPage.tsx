@@ -4,15 +4,18 @@ import {
   IonLabel, IonInput, IonButton, IonText, IonSpinner, IonRadioGroup,
   IonRadio, IonListHeader, IonButtons, IonBackButton,
 } from "@ionic/react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { API_URL } from "../config/api";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 
 const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { token, user } = useAuth();
-  const { items, clearCart } = useCart();
+  const { items, clearCart, removeFromCart, updateQuantity } = useCart();
+  const selectedProductIds = (location.state as { selectedProductIds?: string[] } | null)?.selectedProductIds;
+  const checkoutItems = selectedProductIds?.length ? items.filter((item) => selectedProductIds.includes(item.product.id)) : items;
   const [form, setForm] = useState({
     fullName: user?.name ?? "",
     phone: user?.phone ?? "",
@@ -27,7 +30,7 @@ const CheckoutPage: React.FC = () => {
   const set = (field: string) => (e: CustomEvent) =>
     setForm((prev) => ({ ...prev, [field]: e.detail.value! }));
 
-  const subtotal = items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
+  const subtotal = checkoutItems.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
   const deliveryFee = 99;
   const total = subtotal + deliveryFee;
 
@@ -50,11 +53,16 @@ const CheckoutPage: React.FC = () => {
           paymentMethod: form.paymentMethod,
           phone: form.phone,
           fullName: form.fullName,
+          productIds: selectedProductIds,
         }),
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error); return; }
-      await clearCart();
+      if (selectedProductIds?.length && selectedProductIds.length < items.length) {
+        await Promise.all(selectedProductIds.map((productId) => removeFromCart(productId)));
+      } else {
+        await clearCart();
+      }
       navigate(`/order-confirmation/${data.orderId}`, { replace: true });
     } catch {
       setError("Network error. Please try again.");
@@ -83,6 +91,23 @@ const CheckoutPage: React.FC = () => {
       <IonContent className="ion-padding">
         <div className="tea-card-panel">
           {error && <IonText color="danger"><p>{error}</p></IonText>}
+
+          <h3 style={{ margin: "0 0 12px", color: "#1d1b1a" }}>Your Items</h3>
+          {checkoutItems.map((item) => (
+            <div className="tea-item-row" key={item.product.id}>
+              <img src={item.product.image} alt={item.product.name} className="tea-item-thumb" />
+              <div className="tea-item-copy">
+                <p className="tea-item-name">{item.product.name}</p>
+                <p className="tea-item-sub">₱{item.product.price.toFixed(2)} each</p>
+                <div className="tea-quantity-control">
+                  <IonButton fill="clear" size="small" onClick={() => updateQuantity(item.product.id, item.quantity - 1)} disabled={item.quantity <= 1}>−</IonButton>
+                  <span>{item.quantity}</span>
+                  <IonButton fill="clear" size="small" onClick={() => updateQuantity(item.product.id, item.quantity + 1)} disabled={item.quantity >= item.product.stockQuantity}>+</IonButton>
+                </div>
+              </div>
+              <span className="tea-amount">₱{(item.product.price * item.quantity).toFixed(2)}</span>
+            </div>
+          ))}
 
           <h3 style={{ margin: "0 0 12px", color: "#1d1b1a" }}>Delivery Address</h3>
           <IonItem>

@@ -20,6 +20,8 @@ type CartContextType = {
   itemCount: number;
   isLoading: boolean;
   addToCart: (productId: string, quantity?: number) => Promise<void>;
+  updateQuantity: (productId: string, quantity: number) => Promise<void>;
+  removeFromCart: (productId: string) => Promise<void>;
   clearCart: () => Promise<void>;
   refresh: () => Promise<void>;
 };
@@ -62,10 +64,38 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems([]);
   };
 
+  const updateQuantity = async (productId: string, quantity: number) => {
+    if (!token || quantity < 1) return;
+    const previous = items;
+    setItems((current) => current.map((item) => item.product.id === productId ? { ...item, quantity } : item));
+    try {
+      const res = await fetch(`${API_URL}/api/cart/${productId}`, {
+        method: "PATCH",
+        headers: { ...authHeaders(), "Content-Type": "application/json" },
+        body: JSON.stringify({ quantity }),
+      });
+      if (!res.ok) setItems(previous);
+    } catch {
+      setItems(previous);
+    }
+  };
+
+  const removeFromCart = async (productId: string) => {
+    if (!token) return;
+    const previous = items;
+    setItems((current) => current.filter((item) => item.product.id !== productId));
+    try {
+      const res = await fetch(`${API_URL}/api/cart/${productId}`, { method: "DELETE", headers: authHeaders() });
+      if (!res.ok) setItems(previous);
+    } catch {
+      setItems(previous);
+    }
+  };
+
   const itemCount = items.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ items, itemCount, isLoading, addToCart, clearCart, refresh }}>
+    <CartContext.Provider value={{ items, itemCount, isLoading, addToCart, updateQuantity, removeFromCart, clearCart, refresh }}>
       {children}
     </CartContext.Provider>
   );

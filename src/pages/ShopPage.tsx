@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonSearchbar,
-  IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle,
-  IonCardContent, IonButton, IonSpinner, IonText, IonBadge, IonButtons,
-  IonIcon, IonPopover, IonList, IonItem, IonLabel,
+  IonGrid, IonRow, IonCol, IonCard, IonButton, IonText, IonBadge, IonButtons,
+  IonIcon,
+  IonSelect, IonSelectOption,
 } from "@ionic/react";
-import { cartOutline, menuOutline, logOutOutline } from "ionicons/icons";
+import { cartOutline } from "ionicons/icons";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config/api";
 import { useCart } from "../context/CartContext";
-import { useAuth } from "../context/AuthContext";
+import MobileTabBar from "../components/MobileTabBar";
 
 type Product = {
   id: string;
@@ -22,18 +22,20 @@ type Product = {
   stockQuantity: number;
 };
 
+type SortOption = "newest" | "price-low" | "price-high";
+
 const ShopPage: React.FC = () => {
   const navigate = useNavigate();
   const { itemCount } = useCart();
-  const { user, logout } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [showPopover, setShowPopover] = useState(false);
 
-  useEffect(() => {
-    (async () => {
+  const loadProducts = async () => {
+    setIsLoading(true);
+    setError("");
       try {
         const res = await fetch(`${API_URL}/api/products`);
         const data = await res.json();
@@ -44,8 +46,9 @@ const ShopPage: React.FC = () => {
       } finally {
         setIsLoading(false);
       }
-    })();
-  }, []);
+  };
+
+  useEffect(() => { loadProducts(); }, []);
 
   const filtered = products.filter(
     (p) =>
@@ -53,11 +56,11 @@ const ShopPage: React.FC = () => {
       p.category.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleLogout = async () => {
-    await logout();
-    setShowPopover(false);
-    navigate("/login", { replace: true });
-  };
+  const sortedProducts = [...filtered].sort((first, second) => {
+    if (sortBy === "price-low") return first.price - second.price;
+    if (sortBy === "price-high") return second.price - first.price;
+    return 0;
+  });
 
   return (
     <IonPage className="tea-shop-page">
@@ -73,27 +76,6 @@ const ShopPage: React.FC = () => {
                 </IonBadge>
               )}
             </IonButton>
-            <IonButton id="menu-button">
-              <IonIcon icon={menuOutline} />
-            </IonButton>
-            <IonPopover trigger="menu-button" side="end" alignment="end">
-              <IonContent className="ion-padding">
-                <IonList>
-                  {user && (
-                    <IonItem>
-                      <IonLabel>
-                        <p>{user.firstName} {user.lastName}</p>
-                        <p style={{ fontSize: "0.8rem", color: "var(--tea-text-soft)" }}>{user.email}</p>
-                      </IonLabel>
-                    </IonItem>
-                  )}
-                  <IonItem button onClick={handleLogout}>
-                    <IonIcon icon={logOutOutline} slot="start" style={{ color: "var(--tea-red)" }} />
-                    <IonLabel style={{ color: "var(--tea-red)" }}>Sign Out</IonLabel>
-                  </IonItem>
-                </IonList>
-              </IonContent>
-            </IonPopover>
           </IonButtons>
         </IonToolbar>
         <IonToolbar>
@@ -103,20 +85,34 @@ const ShopPage: React.FC = () => {
             placeholder="Search products..."
           />
         </IonToolbar>
+        <IonToolbar className="tea-sort-toolbar">
+          <div className="tea-sort-control">
+            <span className="tea-sort-label">Sort by</span>
+            <IonSelect
+              aria-label="Sort products"
+              interface="popover"
+              value={sortBy}
+              onIonChange={(event) => setSortBy(event.detail.value as SortOption)}
+              className="tea-sort-select"
+            >
+              <IonSelectOption value="newest">Newest</IonSelectOption>
+              <IonSelectOption value="price-low">Price: Low to High</IonSelectOption>
+              <IonSelectOption value="price-high">Price: High to Low</IonSelectOption>
+            </IonSelect>
+          </div>
+        </IonToolbar>
       </IonHeader>
 
       <IonContent>
         <div className="shop-inner">
           {isLoading && (
-            <div style={{ display: "flex", justifyContent: "center", padding: 32 }}>
-              <IonSpinner name="crescent" />
-            </div>
+            <IonGrid><IonRow>{[1, 2, 3, 4].map((slot) => <IonCol size="6" key={slot}><div className="tea-product-skeleton" /></IonCol>)}</IonRow></IonGrid>
           )}
-          {error && <IonText color="danger"><p className="ion-padding">{error}</p></IonText>}
+          {error && <div className="tea-state"><IonText color="danger"><p>{error}</p></IonText><IonButton fill="outline" onClick={loadProducts}>Try again</IonButton></div>}
 
-          <IonGrid className="product-grid">
+          {!isLoading && !error && <IonGrid className="product-grid">
             <IonRow>
-              {filtered.map((product) => (
+              {sortedProducts.map((product) => (
                 <IonCol size="6" key={product.id}>
                   <IonCard
                     className="tea-product-card"
@@ -147,13 +143,14 @@ const ShopPage: React.FC = () => {
                 </IonCol>
               ))}
             </IonRow>
-          </IonGrid>
+          </IonGrid>}
 
           {!isLoading && filtered.length === 0 && (
             <IonText><p className="ion-padding ion-text-center">No products found.</p></IonText>
           )}
         </div>
       </IonContent>
+      <MobileTabBar />
     </IonPage>
   );
 };

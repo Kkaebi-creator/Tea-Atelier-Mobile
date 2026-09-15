@@ -7,6 +7,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config/api";
 import { useAuth } from "../context/AuthContext";
+import GoogleSignInButton from "../components/GoogleSignInButton";
 
 const LoginPage: React.FC = () => {
   const { login } = useAuth();
@@ -17,6 +18,26 @@ const LoginPage: React.FC = () => {
   const [requiresTotp, setRequiresTotp] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleGoogleCredential = async (credential: string) => {
+    setError("");
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/api/auth/google`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ credential }),
+      });
+      const data = await res.json();
+      if (!res.ok) { setError(data.error || "Google sign-in failed."); return; }
+      await login(data.token, data.user);
+      navigate("/shop", { replace: true });
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmit = async () => {
     setError("");
@@ -91,6 +112,9 @@ const LoginPage: React.FC = () => {
             <IonButton className="auth-button" expand="block" onClick={handleSubmit} disabled={isLoading}>
               {isLoading ? <IonSpinner name="crescent" /> : "Sign In"}
             </IonButton>
+
+            <div className="tea-auth-divider"><span>or continue with</span></div>
+            <GoogleSignInButton onCredential={handleGoogleCredential} />
 
             <p className="auth-link">
               Don't have an account? <IonRouterLink routerLink="/register">Register</IonRouterLink>
